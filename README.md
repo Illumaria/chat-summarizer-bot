@@ -1,2 +1,3 @@
-# chat-summarizer-bot
-Telegram bot for daily chat cummarization
+# Telegram Summarizer Bot
+
+This bot is designed to make summaries of very active chats on a daily basis.
