@@ -1,8 +1,14 @@
 import logging
 
 from telegram import Update
-from telegram.ext import (CallbackContext, CommandHandler, Filters,
-                          MessageHandler, PicklePersistence, Updater)
+from telegram.ext import (
+    CallbackContext,
+    CommandHandler,
+    Filters,
+    MessageHandler,
+    PicklePersistence,
+    Updater,
+)
 
 from src.constants import API_TOKEN, HEROKU_APP_NAME, PORT
 from src.utils import setup_logging
@@ -55,7 +61,7 @@ def main() -> None:
         listen="0.0.0.0",
         port=PORT,
         url_path=API_TOKEN,
-        webhook_url=HEROKU_APP_NAME + API_TOKEN
+        webhook_url=HEROKU_APP_NAME + API_TOKEN,
     )
 
     updater.start_polling()
