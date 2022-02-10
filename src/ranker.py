@@ -32,7 +32,7 @@ def textrank(documents: List[str], threshold_bias: float = 0.2) -> List[str]:
 
     # normalize scores
     if f_min == f_max:
-        temp_array = [0.] * len(document_array)
+        temp_array = [0.0] * len(document_array)
     else:
         temp_array = [
             (float(score) - f_min) / (f_max - f_min) for score, _ in document_array
