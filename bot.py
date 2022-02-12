@@ -11,16 +11,22 @@ from telegram.ext import (
 )
 
 from src.constants import API_TOKEN, HEROKU_APP_NAME, PORT
+from src.crud_operations import (
+    create_session,
+    create_table,
+    set_message,
+    update_message,
+)
 from src.utils import setup_logging
 
 setup_logging()
 logger = logging.getLogger(__name__)
+session = create_session()
 
 
 def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
-    if "history" not in context.user_data:
-        context.user_data["history"] = []
+    create_table(session)
     update.message.reply_text("Saving message history...")
 
 
@@ -31,15 +37,16 @@ def show_history(update: Update, context: CallbackContext) -> None:
 
 def save_history(update: Update, context: CallbackContext) -> None:
     """Save the user message to message history."""
-    msg_id = update.message.message_id
-    msg_time = update.message.date.strftime("%T")
-    msg_text = update.message.text
-    context.user_data["history"].append((msg_id, msg_time, msg_text))
+    if update.message is not None:
+        set_message(session, update.message)
+    elif update.edited_message is not None:
+        update_message(session, update.edited_message)
 
 
 def clear_history(update: Update, context: CallbackContext) -> None:
     """Clear the message history."""
-    context.user_data["history"] = []
+    # TODO: design this!
+    # delete_messages(session, ???)
 
 
 def main() -> None:
@@ -49,20 +56,20 @@ def main() -> None:
 
     dispatcher = updater.dispatcher
 
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("history", show_history))
-    dispatcher.add_handler(CommandHandler("reset", clear_history))
+    dispatcher.add_handler(CommandHandler("start", start, run_async=True))
+    dispatcher.add_handler(CommandHandler("history", show_history, run_async=True))
+    dispatcher.add_handler(CommandHandler("reset", clear_history, run_async=True))
 
     dispatcher.add_handler(
-        MessageHandler(Filters.text & ~Filters.command, save_history)
+        MessageHandler(Filters.text & ~Filters.command, save_history, run_async=True)
     )
 
-    updater.start_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        url_path=API_TOKEN,
-        webhook_url=HEROKU_APP_NAME + API_TOKEN,
-    )
+    # updater.start_webhook(
+    #     listen="0.0.0.0",
+    #     port=PORT,
+    #     url_path=API_TOKEN,
+    #     webhook_url=HEROKU_APP_NAME + API_TOKEN,
+    # )
 
     updater.start_polling()
     updater.idle()
