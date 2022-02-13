@@ -14,6 +14,8 @@ from src.constants import API_TOKEN, HEROKU_APP_NAME, PORT
 from src.crud_operations import (
     create_session,
     create_table,
+    delete_messages,
+    get_messages,
     set_message,
     update_message,
 )
@@ -32,7 +34,10 @@ def start(update: Update, context: CallbackContext) -> None:
 
 def show_history(update: Update, context: CallbackContext) -> None:
     """Show history accumulated from reset to this moment."""
-    update.message.reply_text(context.user_data["history"])
+    chat_id = str(update.message.chat_id)
+    msg_date = update.message.date.date().isoformat()
+    history = get_messages(session, chat_id=chat_id, msg_date=msg_date)
+    update.message.reply_text(" | ".join(history))
 
 
 def save_history(update: Update, context: CallbackContext) -> None:
@@ -45,8 +50,9 @@ def save_history(update: Update, context: CallbackContext) -> None:
 
 def clear_history(update: Update, context: CallbackContext) -> None:
     """Clear the message history."""
-    # TODO: design this!
-    # delete_messages(session, ???)
+    chat_id = str(update.message.chat_id)
+    msg_date = update.message.date.date().isoformat()
+    delete_messages(session, chat_id=chat_id, msg_date=msg_date)
 
 
 def main() -> None:
