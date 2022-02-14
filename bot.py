@@ -70,12 +70,12 @@ def main() -> None:
         MessageHandler(Filters.text & ~Filters.command, save_history, run_async=True)
     )
 
-    # updater.start_webhook(
-    #     listen="0.0.0.0",
-    #     port=PORT,
-    #     url_path=API_TOKEN,
-    #     webhook_url=HEROKU_APP_NAME + API_TOKEN,
-    # )
+    updater.start_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        url_path=API_TOKEN,
+        webhook_url=HEROKU_APP_NAME + API_TOKEN,
+    )
 
     updater.start_polling()
     updater.idle()
