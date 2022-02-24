@@ -1,6 +1,4 @@
-from pathlib import Path
 from typing import List
-from urllib.request import urlretrieve
 
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster, Session
@@ -9,7 +7,7 @@ from telegram import Message
 from src.constants import (
     ASTRA_DB_KEYSPACE,
     ASTRA_DB_PASSWORD,
-    ASTRA_DB_SCB_URL,
+    ASTRA_DB_SCB_PATH,
     ASTRA_DB_TABLE_NAME,
     ASTRA_DB_USERNAME,
 )
@@ -20,9 +18,7 @@ def create_session() -> Session:
     Establish a connection with AstraDB cluster
     :return: Session, a session instance
     """
-    save_path = Path("scb-config.zip").absolute()
-    urlretrieve(ASTRA_DB_SCB_URL, save_path)
-    cloud_config = {"secure_connect_bundle": save_path}
+    cloud_config = {"secure_connect_bundle": ASTRA_DB_SCB_PATH}
     auth_provider = PlainTextAuthProvider(
         username=ASTRA_DB_USERNAME,
         password=ASTRA_DB_PASSWORD,
