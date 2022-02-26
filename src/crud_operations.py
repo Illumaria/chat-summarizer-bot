@@ -18,7 +18,10 @@ def create_session() -> Session:
     Establish a connection with AstraDB cluster
     :return: Session, a session instance
     """
-    cloud_config = {"secure_connect_bundle": ASTRA_DB_SCB_PATH}
+    cloud_config = {
+        "secure_connect_bundle": ASTRA_DB_SCB_PATH,
+        "use_default_tempdir": True,
+    }
     auth_provider = PlainTextAuthProvider(
         username=ASTRA_DB_USERNAME,
         password=ASTRA_DB_PASSWORD,
