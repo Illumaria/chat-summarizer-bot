@@ -4,3 +4,5 @@ nltk==3.7
 numpy==1.22.2
 python-telegram-bot==13.10
 scikit-learn==1.0.2
+# sentencepiece==0.1.96
+# transformers==4.16.2
