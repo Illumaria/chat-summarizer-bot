@@ -10,7 +10,7 @@ from telegram.ext import (
     Updater,
 )
 
-from src.constants import API_TOKEN, HEROKU_APP_NAME, PORT
+from src.constants import API_TOKEN, GCLOUD_APP_NAME, PORT
 from src.crud_operations import (
     create_session,
     create_table,
@@ -74,7 +74,7 @@ def main() -> None:
         listen="0.0.0.0",
         port=PORT,
         url_path=API_TOKEN,
-        webhook_url=HEROKU_APP_NAME + API_TOKEN,
+        webhook_url=GCLOUD_APP_NAME + API_TOKEN,
     )
 
     updater.start_polling()
