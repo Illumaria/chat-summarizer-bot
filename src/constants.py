@@ -12,4 +12,4 @@ ASTRA_DB_SCB_PATH = "/secrets/SECURE_CONNECT_BUNDLE"
 ASTRA_DB_USERNAME = os.environ.get("ASTRA_DB_USERNAME")
 ASTRA_DB_PASSWORD = os.environ.get("ASTRA_DB_PASSWORD")
 
-GCLOUD_APP_NAME = "https://chat-summarizer-bot.lm.r.appspot.com"
+GCLOUD_APP_NAME = "https://chat-summarizer-bot-a56szucg6q-lz.a.run.app"
