@@ -12,6 +12,8 @@ from src.constants import (
     ASTRA_DB_USERNAME,
 )
 
+import json
+
 
 def create_session() -> Session:
     """
@@ -69,8 +71,8 @@ def set_message(session: Session, message: Message) -> None:
         "msg_author_id, msg_author_first_name, "
         "msg_author_last_name, msg_author_username, msg_text) VALUES ("
         f"'{chat_id}',{msg_id},'{msg_link}','{msg_date}','{msg_time}',{msg_author_id},"
-        f"'{msg_author_first_name}','{msg_author_last_name}','{msg_author_username}',"
-        f"'{msg_text}')"
+        f"'{json.dumps(msg_author_first_name)}','{json.dumps(msg_author_last_name)}','{json.dumps(msg_author_username)}',"
+        f"'{json.dumps(msg_text)}')"
     )
 
 
