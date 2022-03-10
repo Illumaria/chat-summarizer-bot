@@ -30,7 +30,7 @@ jobs:
 
     - name: Check with isort
       run: |
-        isort --check .
+        isort --check --diff .
 
     - name: Lint with flake8
       run: |
@@ -38,7 +38,7 @@ jobs:
 
     - name: Lint with black
       run: |
-        black --check .
+        black --check --diff .
 
     - name: Check with mypy
       run: |
