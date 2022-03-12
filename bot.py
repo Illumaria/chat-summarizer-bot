@@ -40,7 +40,9 @@ def show_history(update: Update, context: CallbackContext) -> None:
     msg_date = update.message.date.date().isoformat()
     history: List[Any] = get_messages(session, chat_id=chat_id, msg_date=msg_date)
     merged_history: List[Any] = merge_same_author_messages(history)
-    top_message_indices: List[int] = textrank([x.msg_text.lower() for x in merged_history])
+    top_message_indices: List[int] = textrank(
+        [x.msg_text.lower() for x in merged_history]
+    )
     summary: List[Any] = [merged_history[i] for i in top_message_indices]
     pretty_summary: str = prettify(summary)
     update.message.reply_text(pretty_summary)
