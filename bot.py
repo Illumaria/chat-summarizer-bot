@@ -1,4 +1,5 @@
 import logging
+from typing import Any, List
 
 from telegram import Update
 from telegram.ext import (
@@ -19,7 +20,8 @@ from src.crud_operations import (
     set_message,
     update_message,
 )
-from src.utils import setup_logging
+from src.ranker import textrank
+from src.utils import merge_same_author_messages, prettify, setup_logging
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -36,8 +38,12 @@ def show_history(update: Update, context: CallbackContext) -> None:
     """Show history accumulated from reset to this moment."""
     chat_id = str(update.message.chat_id)
     msg_date = update.message.date.date().isoformat()
-    history = get_messages(session, chat_id=chat_id, msg_date=msg_date)
-    update.message.reply_text(" | ".join(history))
+    history: List[Any] = get_messages(session, chat_id=chat_id, msg_date=msg_date)
+    merged_history: List[Any] = merge_same_author_messages(history)
+    top_message_indices: List[int] = textrank([x.msg_text for x in merged_history])
+    summary: List[Any] = [merged_history[i] for i in top_message_indices]
+    pretty_summary: str = prettify(summary)
+    update.message.reply_text(pretty_summary)
 
 
 def save_history(update: Update, context: CallbackContext) -> None:

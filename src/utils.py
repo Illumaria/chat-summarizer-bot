@@ -27,3 +27,10 @@ def merge_same_author_messages(messages: List[Any], separator: str = " ") -> Lis
         else:
             merged_messages.append(message)
     return merged_messages
+
+
+def prettify(summary: List[Any]) -> str:
+    top_k = len(summary)
+    output = f"#daily #summary #top{top_k}\n"
+    output += "\n".join([f"{i + 1}. {x.msg_link}" for i, x in enumerate(summary)])
+    return output

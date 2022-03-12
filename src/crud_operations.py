@@ -79,8 +79,7 @@ def get_messages(session: Session, chat_id: str, msg_date: str) -> List[str]:
         f"SELECT * FROM {ASTRA_DB_TABLE_NAME} "
         f"WHERE chat_id = '{chat_id}' AND msg_date = '{msg_date}'"
     ).all()
-    texts: List[str] = [x.msg_text for x in result]
-    return texts
+    return result
 
 
 def update_message(session: Session, edited_message: Message) -> None:
