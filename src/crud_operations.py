@@ -1,9 +1,10 @@
-from typing import List
+from typing import Any, List
 
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster, Session
 from telegram import Message
 
+from src.cassandra_row import CassandraRowWrapper
 from src.constants import (
     ASTRA_DB_KEYSPACE,
     ASTRA_DB_PASSWORD,
@@ -74,12 +75,13 @@ def set_message(session: Session, message: Message) -> None:
     )
 
 
-def get_messages(session: Session, chat_id: str, msg_date: str) -> List[str]:
+def get_messages(session: Session, chat_id: str, msg_date: str) -> List[Any]:
     result = session.execute(
         f"SELECT * FROM {ASTRA_DB_TABLE_NAME} "
         f"WHERE chat_id = '{chat_id}' AND msg_date = '{msg_date}'"
     ).all()
-    return result
+    history = [CassandraRowWrapper(row) for row in result]
+    return history
 
 
 def update_message(session: Session, edited_message: Message) -> None:
